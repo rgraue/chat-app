@@ -1,16 +1,7 @@
-# React Quickstart
+# Chat App
 
-- React
-- Typescript
-- esbuild
-- eslint
+Simple chat bot for whatever question you have.
 
-# Local Dev
+## Important
 
-Start service with:
-
-`npm start`
-
-Once running local site can be found:
-
-`http://localhost:8000/index.html`
+Designed to run against a hosted LLM. Developed against the `granite4:1b-h` model.
