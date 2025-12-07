@@ -1,7 +1,7 @@
 import { Box, Flex, Text, WrapItem } from "@chakra-ui/react";
 import React from "react";
 
-export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT', key?: number}) => {
+export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT', key: number | string}) => {
 
     const borderColor = () => {
         switch (side) {

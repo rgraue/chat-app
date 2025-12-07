@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query"
 import { config } from "../utils/config"
-import { Readable } from "stream"
 
 const ASK_PROMPT_KEY = 'ASK_PROMPT'
 
@@ -20,7 +19,7 @@ export const askQuestion = async (input: {prompt: string, verbose: boolean}) => 
         model: configToUse.MODEL,
         messages: [{
             role: configToUse.ROLE,
-            content: input.verbose ? NON_VERBOSE_PREFIX + input.prompt : input.prompt
+            content: !input.verbose ? NON_VERBOSE_PREFIX + input.prompt : input.prompt
         }]
     }
 
