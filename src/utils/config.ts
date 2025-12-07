@@ -1,5 +1,7 @@
 export interface Config {
     SERVER_URL: string;
+    MODEL: string,
+    ROLE: string
 }
 
 // if there is an config.active.json. use that instead.

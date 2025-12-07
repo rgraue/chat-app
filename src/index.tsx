@@ -7,6 +7,7 @@ import { ColorModeProvider } from './components/ui/color-mode';
 
 import { config } from './utils/config';
 import { Home } from './components/home';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const root = document.getElementById('root')!;
 
@@ -25,12 +26,14 @@ const root = document.getElementById('root')!;
 
 
     createRoot(root).render(
-        <ChakraProvider value={defaultSystem}>
-            <ColorModeProvider>
-                <BrowserRouter>
-                    <Home />
-                </BrowserRouter>
-            </ColorModeProvider>
-        </ChakraProvider>
+        <QueryClientProvider client={new QueryClient()}>
+            <ChakraProvider value={defaultSystem}>
+                <ColorModeProvider>
+                    <BrowserRouter>
+                        <Home />
+                    </BrowserRouter>
+                </ColorModeProvider>
+            </ChakraProvider>
+        </QueryClientProvider>
     )
 })()

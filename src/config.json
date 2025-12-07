@@ -1,3 +1,5 @@
 {
-    "SERVER_URL": "http://localhost:8082"
+    "SERVER_URL": "http://localhost:11434/api/chat",
+    "ROLE": "system",
+    "MODEL": "granite4:1b-h"
 }
