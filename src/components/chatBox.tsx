@@ -1,5 +1,5 @@
-import { Container, ScrollArea, Input, InputGroup, Button, IconButton, Group, Switch } from "@chakra-ui/react";
-import React, { JSX, useEffect, useState } from "react";
+import { Container, ScrollArea, Input, IconButton, Group, Switch } from "@chakra-ui/react";
+import React, { useEffect, useState } from "react";
 import { useDevice } from "../hooks/useDevice";
 import {FiArrowRight} from 'react-icons/fi'
 import { Dialog } from './dialog'
@@ -102,9 +102,9 @@ export const ChatBox = () => {
         <Container width={device=='MOBILE' ? '3/4': '3/5'}>
             <Container borderWidth={1} borderColor={'gray'} borderRadius={10}>
                 <ScrollArea.Root height="35rem">
-                    {/* @ts-ignore */}
+                    {/* @ts-expect-error chakra is whack*/}
                     <ScrollArea.Viewport>
-                        {/* @ts-ignore */}
+                        {/* @ts-expect-error chakra is whack*/}
                         <ScrollArea.Content>
                             {dialog}
                         </ScrollArea.Content>
@@ -125,11 +125,12 @@ export const ChatBox = () => {
             </Container>
             <Switch.Root
                 checked={verbose}
+                // eslint-disable-next-line
                 onCheckedChange={(e: any) => setVerbose(e.checked)}
             >
                 <Switch.HiddenInput />
                 <Switch.Control />
-                {/* @ts-ignore */}
+                {/* @ts-expect-error chakra is whack*/}
                 <Switch.Label>Verbose Response</Switch.Label>
             </Switch.Root>
         </Container>

@@ -1,7 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
-import { Banner } from './components/banner';
 import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import { ColorModeProvider } from './components/ui/color-mode';
 
@@ -17,12 +16,11 @@ const root = document.getElementById('root')!;
 (async () => {
 
     // for local dev with esbuild and watch server
-    try {
-        new EventSource('/esbuild').addEventListener('change', () => location.reload());
-    } catch {}
-    
-
     const activeConfig = await config();
+    if (activeConfig.ENV == 'DEV'){
+        new EventSource('/esbuild').addEventListener('change', () => location.reload());
+    }
+    
 
 
     createRoot(root).render(

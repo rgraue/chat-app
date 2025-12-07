@@ -1,4 +1,5 @@
 {
+    "ENV": "DEV",
     "SERVER_URL": "http://localhost:11434/api/chat",
     "ROLE": "system",
     "MODEL": "granite4:1b-h"

@@ -1,4 +1,4 @@
-import { Box, Flex, Text, WrapItem } from "@chakra-ui/react";
+import {Text} from "@chakra-ui/react";
 import React from "react";
 
 export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT', key: number | string}) => {
@@ -14,6 +14,7 @@ export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT',
 
     return (
         <Text 
+            key={key}
             textWrap={'pretty'} 
             maxWidth={'3/4'}
             borderWidth={1} 
