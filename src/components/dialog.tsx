@@ -1,4 +1,4 @@
-import {Text} from "@chakra-ui/react";
+import {Box, Text} from "@chakra-ui/react";
 import React from "react";
 
 export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT', key: number | string}) => {
@@ -12,8 +12,12 @@ export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT',
         }
     }
 
+    const format = () => text.split('\n').map((s, i) => {
+        return (<Text>{s}<br /></Text>);
+    });
+
     return (
-        <Text 
+        <Box 
             key={key}
             textWrap={'pretty'} 
             maxWidth={'3/4'}
@@ -24,7 +28,7 @@ export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT',
             padding={'.5rem'}
             justifySelf={side == 'LEFT' ? 'flex-start' : 'flex-end'}
         >
-            {text}
-        </Text>
+            {format()}
+        </Box>
     )
 }

@@ -1,7 +1,7 @@
-import { Container, ScrollArea, Input, IconButton, Group, Switch } from "@chakra-ui/react";
+import { Container, ScrollArea, Input, IconButton, Group, Switch, Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDevice } from "../hooks/useDevice";
-import {FiArrowRight} from 'react-icons/fi'
+import { FiArrowRight, FiTrash } from 'react-icons/fi'
 import { Dialog } from './dialog'
 import { useAskPrompt } from "../hooks/useAsk";
 
@@ -48,6 +48,10 @@ export const ChatBox = () => {
         setPrompt("");
     }
 
+    const clearDialog = () => {
+        setDialog(old => []);
+    }
+
     const parseResponse = async (data: ReadableStream) => {
         const reader = data.getReader();
 
@@ -73,7 +77,8 @@ export const ChatBox = () => {
                         const obj = JSON.parse(line);
                         buffer += obj.message.content;
                     } else {
-                        buffer += '\n';
+                        // this is kinda weird...
+                        // buffer += '\n';
                     }
                 } catch (e) {
                     console.log(line, (e as Error).message);
@@ -88,7 +93,6 @@ export const ChatBox = () => {
         setDialog(dialogs => {
             return dialogs.map(d => {
                 if (d.key == currentDialogKey) {
-                    console.log('buff', buffer)
                     return <Dialog text={buffer} side="LEFT" key={currentDialogKey} />
                 }
 
@@ -101,7 +105,7 @@ export const ChatBox = () => {
     return (
         <Container width={device=='MOBILE' ? '3/4': '3/5'}>
             <Container borderWidth={1} borderColor={'gray'} borderRadius={10}>
-                <ScrollArea.Root height="35rem">
+                <ScrollArea.Root height='70vh'>
                     {/* @ts-expect-error chakra is whack*/}
                     <ScrollArea.Viewport>
                         {/* @ts-expect-error chakra is whack*/}
@@ -123,16 +127,21 @@ export const ChatBox = () => {
                         </IconButton>
                 </Group>
             </Container>
-            <Switch.Root
-                checked={verbose}
-                // eslint-disable-next-line
-                onCheckedChange={(e: any) => setVerbose(e.checked)}
-            >
-                <Switch.HiddenInput />
-                <Switch.Control />
-                {/* @ts-expect-error chakra is whack*/}
-                <Switch.Label>Verbose Response</Switch.Label>
-            </Switch.Root>
+            <Flex direction={'row'} justify='space-between' marginTop={1}>
+                <Switch.Root
+                    checked={verbose}
+                    // eslint-disable-next-line
+                    onCheckedChange={(e: any) => setVerbose(e.checked)}
+                >
+                    <Switch.HiddenInput />
+                    <Switch.Control />
+                    {/* @ts-expect-error chakra is whack*/}
+                    <Switch.Label>Verbose Response</Switch.Label>
+                </Switch.Root>
+                <IconButton justifySelf={'flex-end'} onClick={clearDialog} variant={'ghost'}>
+                    <FiTrash/>
+                </IconButton>
+            </Flex>
         </Container>
     );
 }
