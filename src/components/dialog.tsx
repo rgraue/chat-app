@@ -13,7 +13,7 @@ export const Dialog = ({text, side, key}: {text: string, side: 'LEFT' | 'RIGHT',
     }
 
     const format = () => text.split('\n').map((s, i) => {
-        return (<Text>{s}<br /></Text>);
+        return (<Text key={i}>{s}<br /></Text>);
     });
 
     return (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useWorkspace } from "../context/workspaceContext";
-import { Button, Container, Flex, Group, Input, Spacer, Table, Text } from "@chakra-ui/react";
+import { Button, Flex, Input, Spacer, Table, Text } from "@chakra-ui/react";
 import { AddUserContextGroup } from "./addUserContextGroup";
 
 export const WorkspaceTable = ({setActive}: {setActive: React.Dispatch<React.SetStateAction<string | undefined>>}) => {
@@ -24,9 +24,9 @@ export const WorkspaceTable = ({setActive}: {setActive: React.Dispatch<React.Set
 
     const convoSearchFunc = () => {
         if (!lookingFor || lookingFor.length == 0) {
-            setConversations(x => workspaces.getConversations());
+            setConversations(() => workspaces.getConversations());
         } else {
-            setConversations(x => {
+            setConversations(() => {
                 const found: string[] = []
                 workspaces.getConversations().forEach(name => {
                     if (name.toUpperCase().startsWith(lookingFor.toUpperCase())) {

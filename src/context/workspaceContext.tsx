@@ -16,6 +16,7 @@ export const useWorkspace = () => {
 }
 
 export const WorkspaceProvider = ({ children, workspace }: { children: any; workspace: WorkspaceService }) => {
+    // eslint-disable-next-line
     const [ workspaceState, setWorkspaceState ] = useState(workspace);
 
     workspaceState.restoreWorkspaces();

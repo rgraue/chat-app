@@ -1,7 +1,6 @@
-import { Button, CloseButton, Dialog, Flex, Portal, Text } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { CloseButton, Dialog, Flex, Portal, Text } from "@chakra-ui/react";
+import React from "react";
 import { WorkspaceTable } from "../components/workspaceTable";
-import { useWorkspace } from "../context/workspaceContext";
 import { ActiveWorkspaceTag } from "../components/activeWorkspaceTag";
 
 export const WorkspaceModal = (

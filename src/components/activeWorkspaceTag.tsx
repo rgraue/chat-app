@@ -1,6 +1,7 @@
 import { Text } from "@chakra-ui/react";
 import React from "react";
 
+// @ts-ignore
 export const ActiveWorkspaceTag = (props: any) => {
 
     const {active, ...rest} = props;

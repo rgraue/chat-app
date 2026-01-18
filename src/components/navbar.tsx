@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Icon, IconButton } from "@chakra-ui/react";
+import { Box, Container, Flex, IconButton } from "@chakra-ui/react";
 import React from "react";
 import { ColorModeButton } from "./ui/color-mode";
 import { TfiCommentAlt } from "react-icons/tfi";

@@ -68,11 +68,11 @@ export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}
     }
 
     const clearDialog = () => {
-        setDialog(old => []);
+        setDialog(() => []);
     }
 
     const restoreFromActive = () => {
-        setDialog(old => 
+        setDialog(() => 
             workspaces.getConversation(activeWorkspace!).map(message => {
                 // system is left
                 if (message.role == 'system') {
@@ -168,7 +168,7 @@ export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}
             <Flex direction={'row'} justify='space-between' marginTop={1} >
                 <Switch.Root
                     checked={verbose}
-                    // eslint-disable-next-line
+                     
                     onCheckedChange={(e: any) => setVerbose(e.checked)}
                 >
                     <Switch.HiddenInput />

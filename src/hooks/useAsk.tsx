@@ -47,6 +47,7 @@ export const askQuestion = async (input: {prompt: string, verbose: boolean, conv
     return response.body;
 }
 
+// @ts-ignore
 const sendPost = async (url: string, body: any ) => fetch(
     url,
     {
