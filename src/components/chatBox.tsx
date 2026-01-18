@@ -1,15 +1,19 @@
 import { Container, ScrollArea, Input, IconButton, Group, Switch, Flex } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useDevice } from "../hooks/useDevice";
-import { FiArrowRight, FiTrash } from 'react-icons/fi'
+import { FiArrowRight, FiRefreshCw, FiTrash } from 'react-icons/fi'
 import { Dialog } from './dialog'
 import { useAskPrompt } from "../hooks/useAsk";
+import { ActiveWorkspaceTag } from "./activeWorkspaceTag";
+import { useWorkspace } from "../context/workspaceContext";
+import { Tooltip } from "./ui/tooltip";
 
 const uuid = () => {
     return `${Math.floor(Math.random() * 10000)}-${Math.floor(Math.random() * 10000)}-${Math.floor(Math.random() * 10000)}`
 }
 
-export const ChatBox = () => {
+export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}) => {
+    const workspaces = useWorkspace();
     const device = useDevice();
     const [prompt, setPrompt] = useState("");
     const [dialog, setDialog] = useState<React.ReactElement[]>([]);
@@ -27,6 +31,10 @@ export const ChatBox = () => {
         }
     }, [isSuccess, isError, data]);
 
+    useEffect(() => {
+        restoreFromActive();
+    }, [activeWorkspace]);
+
     const addErrorDialog = () => {
         setDialog(dialogs => {
             return dialogs.map(d => {
@@ -39,9 +47,20 @@ export const ChatBox = () => {
     }
 
     const addDialog = () => {
+        // user query
         const rightUUID = uuid()
         setDialog(old => [...old, <Dialog text={prompt} side={"RIGHT"} key={rightUUID}/>]);
-        mutate({prompt, verbose});
+
+        // send
+        mutate({prompt, verbose, conversation: activeWorkspace? workspaces.getConversation(activeWorkspace) : undefined });
+        
+        // add user prompt to conversation after if workspace is being used.
+        if (activeWorkspace) {
+            workspaces.addQuery(activeWorkspace, prompt);
+        }
+
+
+        // system response
         const leftUUID = uuid()
         setCurrentDialogKey(leftUUID);
         setDialog(old => [...old, <Dialog text={"..."} side={"LEFT"} key={leftUUID}/>]);
@@ -50,6 +69,19 @@ export const ChatBox = () => {
 
     const clearDialog = () => {
         setDialog(old => []);
+    }
+
+    const restoreFromActive = () => {
+        setDialog(old => 
+            workspaces.getConversation(activeWorkspace!).map(message => {
+                // system is left
+                if (message.role == 'system') {
+                    return <Dialog text={message.content} side={"LEFT"} key={uuid()}/>
+                } else {
+                    return <Dialog text={message.content} side={"RIGHT"} key={uuid()}/>
+                }
+            })
+        )
     }
 
     const parseResponse = async (data: ReadableStream) => {
@@ -66,6 +98,12 @@ export const ChatBox = () => {
 
             if (done) {
                 flushBuffer(buffer);
+
+                // add response to workspace convo if exists
+                if (activeWorkspace) {
+                    workspaces.addResponse(activeWorkspace, buffer);
+                }
+                
                 break;
             }
 
@@ -115,7 +153,7 @@ export const ChatBox = () => {
                     </ScrollArea.Viewport>
                     <ScrollArea.Scrollbar />
                 </ScrollArea.Root>
-                <Group attached w="full"  marginBottom={'1rem'}>
+                <Group attached w="full"  marginBottom={'1rem'} marginTop={'1rem'}>
                     <Input 
                         placeholder={"How can I help?"}
                         name={'prompt'} 
@@ -127,7 +165,7 @@ export const ChatBox = () => {
                         </IconButton>
                 </Group>
             </Container>
-            <Flex direction={'row'} justify='space-between' marginTop={1}>
+            <Flex direction={'row'} justify='space-between' marginTop={1} >
                 <Switch.Root
                     checked={verbose}
                     // eslint-disable-next-line
@@ -138,6 +176,14 @@ export const ChatBox = () => {
                     {/* @ts-expect-error chakra is whack*/}
                     <Switch.Label>Verbose Response</Switch.Label>
                 </Switch.Root>
+                <Flex direction={'row'} gap={2}>
+                    <ActiveWorkspaceTag active={activeWorkspace} alignSelf='center'/>
+                    <Tooltip content={'Restore chat from workspace.'}>
+                        <IconButton onClick={restoreFromActive} disabled={!activeWorkspace} variant={'ghost'}>
+                            <FiRefreshCw/>
+                        </IconButton>
+                    </Tooltip>
+                </Flex>
                 <IconButton justifySelf={'flex-end'} onClick={clearDialog} variant={'ghost'}>
                     <FiTrash/>
                 </IconButton>

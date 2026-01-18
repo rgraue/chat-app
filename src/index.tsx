@@ -5,8 +5,10 @@ import { ChakraProvider, defaultSystem } from '@chakra-ui/react'
 import { ColorModeProvider } from './components/ui/color-mode';
 
 import { config } from './utils/config';
-import { Home } from './components/home';
+import { Home } from './pages/home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { WorkspaceProvider } from './context/workspaceContext';
+import { WorkspaceService } from './services/workspaceService';
 
 const root = document.getElementById('root')!;
 
@@ -28,7 +30,9 @@ const root = document.getElementById('root')!;
             <ChakraProvider value={defaultSystem}>
                 <ColorModeProvider>
                     <BrowserRouter>
-                        <Home />
+                        <WorkspaceProvider workspace={new WorkspaceService()}>
+                            <Home />
+                        </WorkspaceProvider>
                     </BrowserRouter>
                 </ColorModeProvider>
             </ChakraProvider>
