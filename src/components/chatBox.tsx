@@ -178,15 +178,17 @@ export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}
                 </Switch.Root>
                 <Flex direction={'row'} gap={2}>
                     <ActiveWorkspaceTag active={activeWorkspace} alignSelf='center'/>
-                    <Tooltip content={'Restore chat from workspace.'}>
+                    <Tooltip content={'Restore chat from workspace'}>
                         <IconButton onClick={restoreFromActive} disabled={!activeWorkspace} variant={'ghost'}>
                             <FiRefreshCw/>
                         </IconButton>
                     </Tooltip>
                 </Flex>
-                <IconButton justifySelf={'flex-end'} onClick={clearDialog} variant={'ghost'}>
-                    <FiTrash/>
-                </IconButton>
+                <Tooltip content={'Clear Dialog Box'}>
+                    <IconButton justifySelf={'flex-end'} onClick={clearDialog} variant={'ghost'}>
+                        <FiTrash/>
+                    </IconButton>
+                </Tooltip>
             </Flex>
         </Container>
     );
