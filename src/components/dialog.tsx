@@ -1,5 +1,6 @@
-import { Box, Text } from "@chakra-ui/react";
-import React from "react";
+import { Box, CodeBlock, createShikiAdapter, Text } from "@chakra-ui/react";
+import React  from "react";
+import { HighlighterGeneric } from "shiki";
 
 export const Dialog = ({
   text,
@@ -10,6 +11,8 @@ export const Dialog = ({
   side: "LEFT" | "RIGHT";
   key: number | string;
 }) => {
+  // const [codeBlocks, setCodeBlocks] = useState<{code: string, language: string}[]>([]);
+
   const borderColor = () => {
     switch (side) {
       case "RIGHT":
@@ -19,15 +22,92 @@ export const Dialog = ({
     }
   };
 
-  const format = () =>
-    text.split("\n").map((s, i) => {
-      return (
-        <Text key={i}>
-          {s}
-          <br />
-        </Text>
-      );
+  const shikiAdapter = createShikiAdapter<HighlighterGeneric<any, any>>({
+    async load() {
+      const { createHighlighter } = await import("shiki");
+      return createHighlighter({
+        langs: [
+          "tsx",
+          "scss",
+          "html",
+          "bash",
+          "json",
+          "java",
+          "scala",
+          "rust",
+          "ts",
+          "js",
+          "jsx",
+          "css",
+          "txt",
+          "md",
+          "sh",
+          "graphql",
+          "c#",
+          "c++",
+          "yaml",
+          "python",
+        ],
+        themes: ["github-dark"],
+      });
+    },
+    theme: "github-dark",
+  });
+
+  const format = () => {
+    let isCodeBlock = false;
+    let currentBlock = 0;
+    const blocks: string[] = [];
+    const lines = text.split("\n");
+    return lines.map((s, i) => {
+      if ((isCodeBlock && s.endsWith("```")) || i - 1 == lines.length) {
+        let codeBlock = blocks[currentBlock];
+
+        isCodeBlock = false;
+        currentBlock += 1;
+
+        let language = "txt";
+        try {
+          language = codeBlock.split("\n")[0].replace("```", "");
+        // eslint-disable-next-line
+        } catch {}
+
+        codeBlock = codeBlock.substring(codeBlock.indexOf("\n"));
+
+        return (
+          <CodeBlock.AdapterProvider value={shikiAdapter} key={i}>
+            <CodeBlock.Root code={codeBlock} language={language}>
+              <CodeBlock.Content>
+                <CodeBlock.Code>
+                  <CodeBlock.CodeText />
+                </CodeBlock.Code>
+              </CodeBlock.Content>
+            </CodeBlock.Root>
+          </CodeBlock.AdapterProvider>
+        );
+      }
+
+      if (s.startsWith("```")) {
+        isCodeBlock = true;
+        // const lang = s.replace('```', '');
+
+        blocks.push("");
+      }
+
+      if (isCodeBlock) {
+        blocks[currentBlock] += s + "\n";
+      }
+
+      if (!isCodeBlock) {
+        return (
+          <Text key={i}>
+            {s}
+            <br />
+          </Text>
+        );
+      }
     });
+  };
 
   return (
     <Box

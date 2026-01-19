@@ -1,5 +1,5 @@
 // systemService.test.ts
-import { SystemState, SystemService } from "./systemService";
+import { SystemService } from "./systemService";
 
 describe("SystemService", () => {
   let service: SystemService;
