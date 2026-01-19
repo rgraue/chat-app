@@ -3,45 +3,44 @@ import React, { useEffect, useState } from "react";
 import { config } from "../utils/config";
 import { useSystem } from "../context/systemContext";
 
-export const SelectModel = ({models}: {models: string[]}) => {
-    const system = useSystem();
-    const [activeModel, setActiveModel] = useState<string[]>();
+export const SelectModel = ({ models }: { models: string[] }) => {
+  const system = useSystem();
+  const [activeModel, setActiveModel] = useState<string[]>();
 
-    useEffect(() => {
-        const load = async () => {
-            const c = await config();
+  useEffect(() => {
+    const load = async () => {
+      const c = await config();
 
-            if (models.includes(c.MODEL)) {
-                setActiveModel([c.MODEL]);
-            } else {
-              setActiveModel(['Please Select Model']);
-            }
-        }
+      if (models.includes(c.MODEL)) {
+        setActiveModel([c.MODEL]);
+      } else {
+        setActiveModel(["Please Select Model"]);
+      }
+    };
 
-        load();
+    load();
+  }, []);
 
-    }, []);
+  const activeModelHelper = (e: any) => {
+    setActiveModel(e.value);
+    system.setStateValue("model", e.value[0]);
+  };
 
-    const activeModelHelper = (e: any) => {
-      setActiveModel(e.value);
-      system.setStateValue('model', e.value[0]);
-    }
-
-    return (
-    <Select.Root 
-        collection={createListCollection({items: models})} 
-        size="sm" 
-        width="20vh"
-        value={activeModel}
-        onValueChange={(e: any) => activeModelHelper(e)}
+  return (
+    <Select.Root
+      collection={createListCollection({ items: models })}
+      size="sm"
+      width="20vh"
+      value={activeModel}
+      onValueChange={(e: any) => activeModelHelper(e)}
     >
       <Select.HiddenSelect />
       {/* @ts-ignore */}
       <Select.Control>
         {/* @ts-ignore */}
         <Select.Trigger>
-            {/* @ts-ignore */}
-          <Select.ValueText placeholder={activeModel}/>
+          {/* @ts-ignore */}
+          <Select.ValueText placeholder={activeModel} />
         </Select.Trigger>
         <Select.IndicatorGroup>
           <Select.Indicator />
@@ -50,10 +49,10 @@ export const SelectModel = ({models}: {models: string[]}) => {
       <Portal>
         {/* @ts-ignore */}
         <Select.Positioner>
-            {/* @ts-ignore */}
+          {/* @ts-ignore */}
           <Select.Content>
             {models.map((model) => (
-                // @ts-ignore
+              // @ts-ignore
               <Select.Item item={model} key={model}>
                 {model}
                 <Select.ItemIndicator />
@@ -63,5 +62,5 @@ export const SelectModel = ({models}: {models: string[]}) => {
         </Select.Positioner>
       </Portal>
     </Select.Root>
-  )
-}
+  );
+};

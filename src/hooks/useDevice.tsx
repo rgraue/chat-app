@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const MODILE_WIDTH = 700;
 
@@ -6,32 +6,31 @@ export const getWindowDimensions = () => {
   const { innerWidth: width, innerHeight: height } = window;
   return {
     width,
-    height
+    height,
   };
-}
+};
 
-export const getDeviceType = (): 'BROWSER' | 'MOBILE' => {
-    const {width} = getWindowDimensions();
+export const getDeviceType = (): "BROWSER" | "MOBILE" => {
+  const { width } = getWindowDimensions();
 
+  if (width < MODILE_WIDTH) {
+    return "MOBILE";
+  }
 
-    if (width < MODILE_WIDTH) {
-        return 'MOBILE';
-    }
+  return "BROWSER";
+};
 
-    return 'BROWSER';
-}
-
-export const useDevice = () =>  {
+export const useDevice = () => {
   const [device, setDevice] = useState(getDeviceType());
 
   useEffect(() => {
     const handleResize = () => {
-        setDevice(getDeviceType());
-    }
+      setDevice(getDeviceType());
+    };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return device;
-}
+};

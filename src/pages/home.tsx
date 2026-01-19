@@ -5,20 +5,27 @@ import { WorkspaceModal } from "../modals/workspaceModal";
 import { useWorkspace } from "../context/workspaceContext";
 
 export const Home = () => {
-    const workspace = useWorkspace();
-    const [viewingWorkspaces, setviewingWorkspaces] = useState(false);
-    const [activeWorkspace, setActiveWorkspace] = useState(workspace.getActiveConversation());
+  const workspace = useWorkspace();
+  const [viewingWorkspaces, setviewingWorkspaces] = useState(false);
+  const [activeWorkspace, setActiveWorkspace] = useState(
+    workspace.getActiveConversation(),
+  );
 
-    // useEffect(() => {
-    //     workspace.restoreWorkspaces();
-    //     setActiveWorkspace(workspace.getActiveConversation());
-    // }, []);
+  // useEffect(() => {
+  //     workspace.restoreWorkspaces();
+  //     setActiveWorkspace(workspace.getActiveConversation());
+  // }, []);
 
-    return (
-        <>
-        <Navbar workspaceSetter={setviewingWorkspaces}/>
-        <ChatBox activeWorkspace={activeWorkspace}/>
-        <WorkspaceModal isViewing={viewingWorkspaces} setIsViewing={setviewingWorkspaces} active={activeWorkspace} setActive={setActiveWorkspace}/>
-        </>
-    )
-}
+  return (
+    <>
+      <Navbar workspaceSetter={setviewingWorkspaces} />
+      <ChatBox activeWorkspace={activeWorkspace} />
+      <WorkspaceModal
+        isViewing={viewingWorkspaces}
+        setIsViewing={setviewingWorkspaces}
+        active={activeWorkspace}
+        setActive={setActiveWorkspace}
+      />
+    </>
+  );
+};

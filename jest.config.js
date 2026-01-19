@@ -8,7 +8,5 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
   },
-  "setupFiles": [
-    "jest-localstorage-mock"
-  ]
+  setupFiles: ["jest-localstorage-mock"],
 };

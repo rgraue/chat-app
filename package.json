@@ -8,7 +8,8 @@
     "build": "esbuild src/index.tsx --bundle --outfile=public/build/bundle.js --platform=browser",
     "build:active": "",
     "lint": "eslint src/** --quiet",
-    "format": "eslint src/** --fix"
+    "format": "prettier . --write",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
@@ -39,6 +40,7 @@
     "eslint": "^9.18.0",
     "eslint-plugin-react": "^7.37.3",
     "globals": "^15.14.0",
-    "jest-localstorage-mock": "^2.4.26"
+    "jest-localstorage-mock": "^2.4.26",
+    "prettier": "^3.8.0"
   }
 }
