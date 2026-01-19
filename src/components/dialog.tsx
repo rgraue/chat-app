@@ -47,6 +47,7 @@ export const Dialog = ({
           "c++",
           "yaml",
           "python",
+          "groovy"
         ],
         themes: ["github-dark"],
       });
@@ -74,17 +75,26 @@ export const Dialog = ({
 
         codeBlock = codeBlock.substring(codeBlock.indexOf("\n"));
 
-        return (
-          <CodeBlock.AdapterProvider value={shikiAdapter} key={i}>
-            <CodeBlock.Root code={codeBlock} language={language}>
-              <CodeBlock.Content>
-                <CodeBlock.Code>
-                  <CodeBlock.CodeText />
-                </CodeBlock.Code>
-              </CodeBlock.Content>
-            </CodeBlock.Root>
-          </CodeBlock.AdapterProvider>
-        );
+        try {
+          return (
+            <CodeBlock.AdapterProvider value={shikiAdapter} key={i}>
+              <CodeBlock.Root code={codeBlock} language={language}>
+                <CodeBlock.Content>
+                  <CodeBlock.Code>
+                    <CodeBlock.CodeText />
+                  </CodeBlock.Code>
+                </CodeBlock.Content>
+              </CodeBlock.Root>
+            </CodeBlock.AdapterProvider>
+          );
+
+        } catch {
+          <Text key={i}>
+            {s}
+            <br />
+          </Text>
+        }
+        
       }
 
       if (s.startsWith("```")) {
