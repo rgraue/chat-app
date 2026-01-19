@@ -15,6 +15,6 @@ export const ActiveWorkspaceTag = (props: any) => {
     }
 
     return (
-        <Text {...rest}  color={active ? 'green' : 'grey'} textStyle={'sm'}>{helper()}</Text>
+        <Text {...rest}  color={active ? 'green' : 'grey'} textStyle={'label'}>{helper()}</Text>
     )
 }

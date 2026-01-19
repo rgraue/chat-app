@@ -21,7 +21,7 @@ export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}
     const [dialog, setDialog] = useState<React.ReactElement[]>([]);
     const [currentDialogKey, setCurrentDialogKey] = useState<string | number>();
     const {mutate, data, isSuccess, isError} = useAskPrompt();
-    const [verbose, setVerbose] = useState(false);
+    const [verbose, setVerbose] = useState(true);
 
     useEffect(() => {
         if (isError) {
@@ -172,7 +172,7 @@ export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}
                         </IconButton>
                 </Group>
             </Container>
-            <Flex direction={'row'} justify='space-between' marginTop={1} >
+            <Flex direction={'row'} justify='space-between' marginTop={1} alignContent={'center'}>
                 <Switch.Root
                     checked={verbose}
                      
