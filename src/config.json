@@ -1,6 +1,6 @@
 {
     "ENV": "DEV",
-    "SERVER_URL": "http://localhost:11434/api/chat",
+    "SERVER_URL": "http://localhost:11434",
     "ROLE": "user",
     "MODEL": "granite4:1b-h"
 }

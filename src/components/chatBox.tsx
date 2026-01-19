@@ -7,6 +7,7 @@ import { useAskPrompt } from "../hooks/useAsk";
 import { ActiveWorkspaceTag } from "./activeWorkspaceTag";
 import { useWorkspace } from "../context/workspaceContext";
 import { Tooltip } from "./ui/tooltip";
+import { useSystem } from "../context/systemContext";
 
 const uuid = () => {
     return `${Math.floor(Math.random() * 10000)}-${Math.floor(Math.random() * 10000)}-${Math.floor(Math.random() * 10000)}`
@@ -14,6 +15,7 @@ const uuid = () => {
 
 export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}) => {
     const workspaces = useWorkspace();
+    const system = useSystem();
     const device = useDevice();
     const [prompt, setPrompt] = useState("");
     const [dialog, setDialog] = useState<React.ReactElement[]>([]);
@@ -52,7 +54,12 @@ export const ChatBox = ({activeWorkspace}: {activeWorkspace: string | undefined}
         setDialog(old => [...old, <Dialog text={prompt} side={"RIGHT"} key={rightUUID}/>]);
 
         // send
-        mutate({prompt, verbose, conversation: activeWorkspace? workspaces.getConversation(activeWorkspace) : undefined });
+        mutate({
+            prompt, 
+            verbose, 
+            model: system.getStateValue('model'), 
+            conversation: activeWorkspace? workspaces.getConversation(activeWorkspace) : undefined 
+        });
         
         // add user prompt to conversation after if workspace is being used.
         if (activeWorkspace) {

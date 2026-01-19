@@ -14,7 +14,7 @@ export const useAskPrompt = () => {
 }
 
 
-export const askQuestion = async (input: {prompt: string, verbose: boolean, conversation?: ConversationMessage[] }) => {
+export const askQuestion = async (input: {prompt: string, verbose: boolean, model: string, conversation?: ConversationMessage[] }) => {
     const configToUse = await config();
 
     const messages = []
@@ -33,11 +33,11 @@ export const askQuestion = async (input: {prompt: string, verbose: boolean, conv
     })
 
     const body = {
-        model: configToUse.MODEL,
+        model: input.model,
         messages
     }
 
-    const response = await sendPost(configToUse.SERVER_URL, body);
+    const response = await sendPost(`${configToUse.SERVER_URL}/api/chat`, body);
 
     if (response.status !== 200) {
         // return Readable.from("bad");

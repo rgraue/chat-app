@@ -9,12 +9,12 @@ import { Home } from './pages/home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { WorkspaceProvider } from './context/workspaceContext';
 import { WorkspaceService } from './services/workspaceService';
+import { SystemProvider } from './context/systemContext';
+import { SystemService, SystemState } from './services/systemService';
 
 const root = document.getElementById('root')!;
 
 // up to you to gaurd this for nonprod use only
-
-
 (async () => {
 
     // for local dev with esbuild and watch server
@@ -22,17 +22,21 @@ const root = document.getElementById('root')!;
     if (activeConfig.ENV == 'DEV'){
         new EventSource('/esbuild').addEventListener('change', () => location.reload());
     }
-    
 
+    const initSystemState: SystemState = {
+        model: activeConfig.MODEL
+    }
 
     createRoot(root).render(
         <QueryClientProvider client={new QueryClient()}>
             <ChakraProvider value={defaultSystem}>
                 <ColorModeProvider>
                     <BrowserRouter>
-                        <WorkspaceProvider workspace={new WorkspaceService()}>
-                            <Home />
-                        </WorkspaceProvider>
+                        <SystemProvider system={new SystemService(initSystemState)}>
+                            <WorkspaceProvider workspace={new WorkspaceService()}>
+                                <Home />
+                            </WorkspaceProvider>
+                        </SystemProvider>
                     </BrowserRouter>
                 </ColorModeProvider>
             </ChakraProvider>

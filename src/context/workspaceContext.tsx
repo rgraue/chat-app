@@ -3,7 +3,7 @@ import { createContext, useState } from "react";
 import { WorkspaceService } from "../services/workspaceService";
 
 
-const workspaceContext = createContext<WorkspaceService | undefined>(undefined)
+const workspaceContext = createContext<WorkspaceService | undefined>(undefined);
 
 export const useWorkspace = () => {
     const context = useContext(workspaceContext);
