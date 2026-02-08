@@ -1,30 +1,9 @@
 import { Box, CodeBlock, createShikiAdapter, Text } from "@chakra-ui/react";
-import React  from "react";
+import React, { useState }  from "react";
 import { HighlighterGeneric } from "shiki";
+import { getShikiAdapter, langs} from "../utils/shiki";
 
-const langs = [
-          "tsx",
-          "scss",
-          "html",
-          "bash",
-          "json",
-          "java",
-          "scala",
-          "rust",
-          "ts",
-          "js",
-          "jsx",
-          "css",
-          "txt",
-          "md",
-          "sh",
-          "graphql",
-          "c#",
-          "c++",
-          "yaml",
-          "python",
-          "groovy"
-        ]
+
 
 export const Dialog = ({
   text,
@@ -35,8 +14,6 @@ export const Dialog = ({
   side: "LEFT" | "RIGHT";
   key: number | string;
 }) => {
-  // const [codeBlocks, setCodeBlocks] = useState<{code: string, language: string}[]>([]);
-
   const borderColor = () => {
     switch (side) {
       case "RIGHT":
@@ -59,11 +36,11 @@ export const Dialog = ({
         // eslint-disable-next-line
         } catch {}
 
-        codeBlock = codeBlock.substring(codeBlock.indexOf("\n"));
+        codeBlock = codeBlock.substring(codeBlock.indexOf("\n")).replace('\n```', '');
 
         try {
           return (
-            <CodeBlock.AdapterProvider value={shikiAdapter} key={currentBlock}>
+            <CodeBlock.AdapterProvider value={getShikiAdapter()} key={crypto.randomUUID()}>
               <CodeBlock.Root code={codeBlock} language={language}>
                 <CodeBlock.Content>
                   <CodeBlock.Code>
@@ -75,7 +52,7 @@ export const Dialog = ({
           );
 
         } catch {
-          <Text key={currentBlock}>
+          <Text key={crypto.randomUUID()}>
             {codeBlock}
             <br />
           </Text>
@@ -88,14 +65,8 @@ export const Dialog = ({
     const blocks: string[] = [];
     const lines = text.split("\n");
     return lines.map((s, i) => {
-      if ((isCodeBlock && s.endsWith("```"))) {
-        isCodeBlock = false;
-        currentBlock += 1;
-        
-        return tryCodeBlock(blocks, currentBlock - 1);
-      }
-
-      if (s.startsWith("```")) {
+      // start
+      if (s.startsWith("```") && !isCodeBlock) {
         isCodeBlock = true;
         // const lang = s.replace('```', '');
 
@@ -105,7 +76,15 @@ export const Dialog = ({
       if (isCodeBlock) {
         blocks[currentBlock] += s + "\n";
 
-        // return tryCodeBlock(blocks, currentBlock);
+        if (s.endsWith("```")) {
+          isCodeBlock = false;
+          currentBlock += 1;
+          return tryCodeBlock(blocks, currentBlock - 1);
+        } 
+
+        // else if (i <= lines.length) {
+        //   return tryCodeBlock(blocks, currentBlock);
+        // }
       }
 
       if (!isCodeBlock) {
@@ -135,14 +114,3 @@ export const Dialog = ({
     </Box>
   );
 };
-
-  const shikiAdapter = createShikiAdapter<HighlighterGeneric<any, any>>({
-    async load() {
-      const { createHighlighter } = await import("shiki");
-      return createHighlighter({
-        langs: langs,
-        themes: ["github-dark"],
-      });
-    },
-    theme: "github-dark",
-  });
