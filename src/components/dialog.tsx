@@ -2,6 +2,7 @@ import { Box, CodeBlock, createShikiAdapter, Text } from "@chakra-ui/react";
 import React, { useState }  from "react";
 import { HighlighterGeneric } from "shiki";
 import { getShikiAdapter, langs} from "../utils/shiki";
+import { CODE_BLOCK_SEP, CodeBlockBuff } from "./codeBlockBuff";
 
 
 
@@ -23,78 +24,42 @@ export const Dialog = ({
     }
   };
 
-  const tryCodeBlock = (blocks: string[], currentBlock: number) => {
-        let codeBlock = blocks[currentBlock];
-
-        let language = "txt";
-        try {
-          language = codeBlock.split("\n")[0].replace("```", "");
-          
-          if (!langs.includes(language)) {
-            language = 'txt'
-          }
-        // eslint-disable-next-line
-        } catch {}
-
-        codeBlock = codeBlock.substring(codeBlock.indexOf("\n")).replace('\n```', '');
-
-        try {
-          return (
-            <CodeBlock.AdapterProvider value={getShikiAdapter()} key={crypto.randomUUID()}>
-              <CodeBlock.Root code={codeBlock} language={language}>
-                <CodeBlock.Content>
-                  <CodeBlock.Code>
-                    <CodeBlock.CodeText />
-                  </CodeBlock.Code>
-                </CodeBlock.Content>
-              </CodeBlock.Root>
-            </CodeBlock.AdapterProvider>
-          );
-
-        } catch {
-          <Text key={crypto.randomUUID()}>
-            {codeBlock}
-            <br />
-          </Text>
-        }
-  }
-
   const format = () => {
     let isCodeBlock = false;
     let currentBlock = 0;
-    const blocks: string[] = [];
+    let blocks: string = '';
     const lines = text.split("\n");
-    return lines.map((s, i) => {
+    return lines.map((line, i) => {
       // start
-      if (s.startsWith("```") && !isCodeBlock) {
-        isCodeBlock = true;
-        // const lang = s.replace('```', '');
+        if (line.startsWith("```") && !isCodeBlock) {
+            isCodeBlock = true;
 
-        blocks.push("");
-      }
+            blocks += line + '\n';
+            return CODE_BLOCK_SEP
+        }
 
-      if (isCodeBlock) {
-        blocks[currentBlock] += s + "\n";
+        if (isCodeBlock) {
+            blocks += line + '\n';
 
-        if (s.endsWith("```")) {
-          isCodeBlock = false;
-          currentBlock += 1;
-          return tryCodeBlock(blocks, currentBlock - 1);
-        } 
+            if (line.endsWith("```")) {
+                isCodeBlock = false;
+                blocks += CODE_BLOCK_SEP;
+                return;
+            
+            } 
+        }
 
-        // else if (i <= lines.length) {
-        //   return tryCodeBlock(blocks, currentBlock);
-        // }
-      }
+        // if not code block
+        if (!isCodeBlock) {
+            return <Text>{line.length > 0 ? line : <br />}</Text>
+        }
+    }).map(line => {
+        if (line === '<code_block>') {
+            currentBlock += 1;
+            return <CodeBlockBuff pos={currentBlock - 1} code={blocks} />
+        }
 
-      if (!isCodeBlock) {
-        return (
-          <Text key={i}>
-            {s}
-            <br />
-          </Text>
-        );
-      }
+        return line;
     });
   };
 
