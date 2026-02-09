@@ -27,7 +27,7 @@ export const CodeBlockBuff = ({code, pos}: {code: string, pos: number}) => {
 
         toRender = toRender.substring(toRender.indexOf("\n")).replace('\n```', '');
         return (
-            <CodeBlock.AdapterProvider value={getShikiAdapter()} key={crypto.randomUUID()}>
+            <CodeBlock.AdapterProvider value={getShikiAdapter()} key={CODE_BLOCK_SEP + pos}>
                 <CodeBlock.Root code={toRender} language={language}>
                     <CodeBlock.Content>
                     <CodeBlock.Code>
